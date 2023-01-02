@@ -52,7 +52,13 @@ let skor = 0;
 function skor2() {
   return skor++;
 }
+// console.log(`Skor1: ${skorArtirici()} Skor2: ${skor2()}`);
+// console.log(`Skor1: ${skor1} Skor2: ${skor2()}`);
+// console.log(`Skor1: ${skor1} Skor2: ${skor2()}`);
+// console.log(`Skor1: ${skor1} Skor2: ${skor2()}`);
 
+
+// skor1'de skor değişkeni function içerisine bulunmaktadır, yani "function scope". 
 
 /* Görev 2: takimSkoru() 
 Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
@@ -65,9 +71,10 @@ Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyon
 */
 
 function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+    let cSkor = Math.floor(Math.random()*15)+10;
+    return cSkor;
 }
-
+takimSkoru();
 
 
 
@@ -86,11 +93,26 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
-}
+function macSonucu(callback,cSayi){
+  let evSkor=0;
+  let konukSkor= 0;
+  for (let index = 0; index < cSayi; index++) {
+    evSkor+=callback();
+    konukSkor +=callback(); 
+  }
+  
+  let fSkor = {} ;
+    fSkor ["EvSahibi"] = evSkor;
+    fSkor ["KonukTakim"] = konukSkor;
+    return fSkor;
+    
+    // const fSkor = {
+    // "EvSahibi" : evSkor ,
+    // "KonukTakim" : konukSkor};
+  }
 
-
+console.log(macSonucu(takimSkoru,4));
+console.log("maç sonucu verildi");
 
 
 
@@ -109,11 +131,13 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-
+function periyotSkoru(callback) {
+  let score = {};
+  score["EvSahibi"] = callback();
+  score["KonukTakim"] = callback();
+  return score;
 }
-
+console.log(periyotSkoru(takimSkoru));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -137,7 +161,7 @@ MAÇ UZAMAZ ise skorTabelasi(periyotSkoru,takimSkoru,4)
 MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 [
   "1. Periyot: Ev Sahibi 10 - Konuk Takım 21", 
-  "2. Periyot: Ev Sahibi 20 - Konuk Takım 13",
+  "2. Periyot: Ev Sahibi 20 - Konuk Takım       13",
   "3. Periyot: Ev Sahibi 13 - Konuk Takım 9", 
   "4. Periyot: Ev Sahibi 18 - Konuk Takım 18",
   "1. Uzatma: Ev Sahibi 10 - Konuk Takım 6" 
@@ -146,11 +170,33 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-}
 
-
+  function skorTabelasi(periyotSkoru, takimSkoru, ceyrek) {
+    let periyot = {
+      EvSahibi:0,
+      KonukTakim:0
+    }
+    let array =[];
+    for (let i = 1; i <= ceyrek; i++) {
+      let x = periyotSkoru(takimSkoru);
+      periyot.EvSahibi+=x.EvSahibi;
+      periyot.KonukTakim+=x.KonukTakim;
+      array[i-1] = i + '.Periyot: Ev Sahibi: ' + x.EvSahibi+ '- KonukTakim: ' + x.KonukTakim;
+    }
+    if (periyot.EvSahibi===periyot.KonukTakim) {
+      let a = periyotSkoru(takimSkoru);
+      periyot.EvSahibi+=a.EvSahibi;
+      periyot.KonukTakim+=a.KonukTakim;
+      let array1 = '1. Uzatma: Ev Sahibi: ' + a.EvSahibi+ '- KonukTakim: ' + a.KonukTakim;
+      array.push(array1);
+    }
+    let b= 'Mac Sonucu: Ev Sahibi: ' + periyot.EvSahibi+ '- KonukTakim: ' + periyot.KonukTakim;
+    array.push(b);
+    return array
+  }
+  
+  console.log(skorTabelasi(periyotSkoru,takimSkoru,4))
+  
 
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
